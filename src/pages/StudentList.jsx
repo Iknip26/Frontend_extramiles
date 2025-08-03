@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./styles.css"; // pastikan ini sesuai dengan lokasi file css
 
 function StudentList() {
   const [students, setStudents] = useState([]);
@@ -16,7 +17,7 @@ function StudentList() {
       await fetch(`http://localhost:5115/api/Student/${id}`, {
         method: "DELETE",
       });
-      await fetchStudents(); // tunggu fetch selesai
+      await fetchStudents();
     }
   };
 
@@ -25,43 +26,37 @@ function StudentList() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Daftar Mahasiswa</h1>
-        <Link
-          to="/add"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-        >
+    <div className="container">
+      <div className="header">
+        <h1>Daftar Mahasiswa</h1>
+        <Link to="/add" className="add-button">
           Tambah Mahasiswa
         </Link>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-300 text-sm text-left">
-          <thead className="bg-gray-200">
+      <div className="table-container">
+        <table>
+          <thead>
             <tr>
-              <th className="py-2 px-4 border">NIM</th>
-              <th className="py-2 px-4 border">Nama Lengkap</th>
-              <th className="py-2 px-4 border">Usia</th>
-              <th className="py-2 px-4 border">Aksi</th>
+              <th>NIM</th>
+              <th>Nama Lengkap</th>
+              <th>Usia</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
             {students.map((s) => (
-              <tr key={s.id} className="border-t">
-                <td className="py-2 px-4 border">{s.id}</td>
-                <td className="py-2 px-4 border">{s.namaLengkap}</td>
-                <td className="py-2 px-4 border">{s.usia} tahun</td>
-                <td className="py-2 px-4 border flex gap-2">
-                  <Link
-                    to={`/edit/${s.id}`}
-                    className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                  >
+              <tr key={s.id}>
+                <td>{s.id}</td>
+                <td>{s.namaLengkap}</td>
+                <td>{s.usia} tahun</td>
+                <td className="actions">
+                  <Link to={`/edit/${s.id}`} className="button-edit">
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(s.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    className="button-delete"
                   >
                     Hapus
                   </button>
@@ -70,7 +65,7 @@ function StudentList() {
             ))}
             {students.length === 0 && (
               <tr>
-                <td colSpan="4" className="text-center py-4 text-gray-500">
+                <td colSpan="4" className="no-data">
                   Tidak ada data mahasiswa.
                 </td>
               </tr>
